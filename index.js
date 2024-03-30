@@ -41,7 +41,7 @@ mongoose.connect('mongodb://localhost:27017/login-system', {
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 */
-
+/*
 // User schema
 const userSchema = new mongoose.Schema({
     username: String,
@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
     role: { type: String, default: 'user' } // Default role is 'user'
 });
 const User = mongoose.model('User', userSchema);
-
+*/
 // Hash the admin password
 const adminPassword = '12345678'; // Replace this with the admin password
 const hashedPassword = bcrypt.hashSync(adminPassword, 10); // Hashing the password with salt rounds 10
