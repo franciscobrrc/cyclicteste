@@ -1,18 +1,46 @@
+//-------------------------------------------------------------------------------- meu abaixo
+
+require('dotenv').config();
+//--------------------------------------------------------------------------------
+
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+//--------------------------------------------------------------------------------meu abaixo
+
+const Book = require("./models/users");
+//--------------------------------------------------------------------------------
+
 const app = express();
 const activeSessions = {}; // Object to store active sessions
 
-// Database connection
+//--------------------------------------------------------------------------------meu abaixo
+const PORT = process.env.PORT || 3000
+
+mongoose.set('strictQuery', false);
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
+//--------------------------------------------------------------------------------
+
+
+/* Database connection
 mongoose.connect('mongodb://localhost:27017/login-system', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
+*/
 
 // User schema
 const userSchema = new mongoose.Schema({
@@ -147,5 +175,6 @@ app.get('/admin/dashboard', requireLogin, (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
