@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -6,6 +8,23 @@ const bcrypt = require('bcryptjs');
 
 const app = express();
 const activeSessions = {}; // Object to store active sessions
+
+//--------------------------------------------------------------------------------
+const PORT = process.env.PORT || 3000
+
+mongoose.set('strictQuery', false);
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
+//--------------------------------------------------------------------------------
+
 
 // Database connection
 mongoose.connect('mongodb://localhost:27017/login-system', {
@@ -147,5 +166,6 @@ app.get('/admin/dashboard', requireLogin, (req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+

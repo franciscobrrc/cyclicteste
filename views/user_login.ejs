@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="/styles_user_login.css"> <!-- Add this line to link the CSS file -->
+</head>
+<body>
+    <h1 id="loginText">User Login</h1> <!-- Add id="loginText" to the h1 tag -->
+    <% if (error) { %>
+        <p><%= error %></p>
+    <% } %>
+    <form action="/login" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginText = document.getElementById('loginText');
+            loginText.addEventListener('dblclick', function() {
+                window.location.href = '/admin/login'; // Redirect to the admin login page
+            });
+        });
+    </script>
+</body>
+</html>

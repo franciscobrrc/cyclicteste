@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIFLY LINE CHECK GAME</title>
+    <style>
+        /* Add your CSS styles here */
+
+        /* Body style */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5faff;
+            /* Light blue background */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container style */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Question style */
+        #question {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #003366;
+            /* Dark blue text color */
+        }
+
+        /* Options style */
+        #options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 18px;
+            background-color: #ffffff;
+            /* White background */
+            border: 1px solid #003366;
+            /* Dark blue border */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            color: #003366;
+            /* Dark blue text color */
+        }
+
+        #options button:hover {
+            background-color: #e6e6e6;
+            /* Lighter background on hover */
+        }
+
+        /* Lifeline button style */
+        .lifeline-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #66ccff;
+            /* Light blue background */
+            color: #003366;
+            /* Dark blue text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .lifeline-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .lifeline-button:hover {
+            background-color: #3399ff;
+            /* Darker blue on hover */
+        }
+
+
+
+
+        /* Button style QUESTION LIST */
+        #toggleQuestionList {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #66ccff;
+            /* Light blue */
+            color: #003366;
+            /* Dark blue */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #toggleQuestionList:hover {
+            background-color: #3399ff;
+            /* Darker blue on hover */
+        }
+
+        /* Question list style */
+        #questionList {
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #questionChecklist {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #questionListH3 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #003366; 
+        }
+
+        #questionChecklist li {
+            margin-bottom: 5px;
+        }
+
+        #questionChecklist label {
+            color: #003366;
+            /* Dark blue */
+            margin-left: 5px;
+        }
+
+        #questionChecklist input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+
+        /* Score style */
+        #score {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            float: right;
+            color: #003366;
+            /* Dark blue text color */
+        }
+
+        /* remainingQuestions style */
+        #remainingQuestions {
+            font-size: 15px;
+            font-weight: bold;
+            margin-top: 20px;
+
+            color: #003366;
+            /* Dark blue text color */
+        }
+
+
+
+
+        /* Custom question form style */
+        #customQuestionForm {
+            margin-top: 20px;
+        }
+
+        #customQuestionForm label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #003366;
+            /* Dark blue text color */
+        }
+
+        #customQuestionForm input {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: 1px solid #003366;
+            /* Dark blue border */
+            border-radius: 5px;
+        }
+
+        #customQuestionForm button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #66ccff;
+            /* Light blue background */
+            color: #003366;
+            /* Dark blue text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #customQuestionForm button:hover {
+            background-color: #3399ff;
+            /* Darker blue on hover */
+        }
+
+        /* Positioning for the delete button */
+        #deleteButton {
+            margin-left: 540px;
+            /* Adjust margin as needed */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome, <%= username %>!</h1>
+        <!-- Your content for the user page goes here -->
+    </div>
+
+
+    <div class="container">
+        <div id="question"></div>
+        <div id="options"></div>
+        <div id="remainingQuestions" style="text-align: center;"></div>
+        <p></p>
+        <button class="lifeline-button" id="fiftyFifty" onclick="fiftyFiftyLifeline()">50:50</button>
+        <button class="lifeline-button" id="askAudience" onclick="askAudienceLifeline()">Ask the Audience</button>
+        <button class="lifeline-button" id="phoneFriend" onclick="phoneFriendLifeline()">Phone a Friend</button>
+
+
+
+        <div id="score">Score: 0</div>
+
+
+
+
+
+
+        
+
+        <div>
+            <p></p>
+        </div>
+        <!-- Restart game button -->
+        <button class="lifeline-button" id="restartButton" onclick="restartGame()">Restart Game</button>
+
+        <!-- Button to toggle question list -->
+        <button class="questionList" id="toggleQuestionList" onclick="toggleQuestionList()">Show/Hide Question
+            List</button>
+
+
+        <!-- Question list -->
+        <div id="questionList" style="display: none;">
+            <h3 id="questionListH3">Question List</h3>
+
+            <!-- Question filter by name -->
+            <input type="text" id="questionFilter" oninput="filterQuestions()" placeholder="Filter by question name">
+
+            <!-- Show button to toggle visibility of delete buttons -->
+            <button id="showDeleteButtons" onclick="toggleDeleteButtons()">Show Delete Buttons</button>
+
+
+            <ul id="questionChecklist">
+                <!-- List items for questions will be added dynamically -->
+            </ul>
+        </div>
+        <!-- Custom question form -->
+        <form id="customQuestionForm">
+            <label for="customQuestion">Custom Question:</label>
+            <input type="text" id="customQuestion" required>
+            <label for="customOptions">Options (comma-separated):</label>
+            <input type="text" id="customOptions" required>
+            <label for="customAnswer">Correct Answer (index):</label>
+            <input type="number" id="customAnswer" required>
+            <label for="customCategory">Category:</label> <!-- New input for category -->
+            <input type="text" id="customCategory" required>
+            <label for="customDifficulty">Difficulty Level (1-5):</label> <!-- New input for difficulty level -->
+            <input type="number" id="customDifficulty" required min="1" max="5">
+            <button type="button" onclick="addCustomQuestion()">Add Custom Question</button>
+        </form>
+    </div>
+
+    <script>
+
+        // Sample questions data
+        let questions = [
+            {
+                question: "Scott Avox is a?",
+                options: ["PBE", "ILV", "MRT", "FDRC"],
+                answer: 0,
+                category: "Equipment",
+                difficulty: 2 // Difficulty level: 2
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                answer: 1,
+                category: "Astronomy",
+                difficulty: 3 // Difficulty level: 3
+            },
+            {
+                question: "What is the chemical symbol for water?",
+                options: ["H2O", "CO2", "O2", "H2SO4"],
+                answer: 0,
+                category: "Science",
+                difficulty: 1 // Difficulty level: 1
+            }
+        ];
+
+        // Global variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let lifelinesUsed = {
+            fiftyFifty: false,
+            askAudience: false,
+            phoneFriend: false
+        };
+
+        // Data structure to hold checked questions
+        let checkedQuestions = [];
+
+        // DOM elements
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const scoreElement = document.getElementById('score');
+
+        function loadQuestion() {
+            const currentQuestion = checkedQuestions[currentQuestionIndex];
+            questionElement.textContent = currentQuestion.question;
+
+            // Clear previous options
+            optionsElement.innerHTML = '';
+
+            // Add answer options
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.addEventListener('click', () => checkAnswer(index));
+                optionsElement.appendChild(button);
+            });
+
+            // Check lifelines status
+            if (lifelinesUsed.fiftyFifty) {
+                document.getElementById('fiftyFifty').disabled = true;
+            }
+            if (lifelinesUsed.askAudience) {
+                document.getElementById('askAudience').disabled = true;
+                document.getElementById('askAudience').classList.add('used');
+            }
+            if (lifelinesUsed.phoneFriend) {
+                document.getElementById('phoneFriend').disabled = true;
+            }
+        }
+
+        // Function to check answer
+        function checkAnswer(selectedOption) {
+            const currentQuestion = checkedQuestions[currentQuestionIndex];
+            const options = Array.from(optionsElement.children);
+
+            if (selectedOption === currentQuestion.answer) {
+                // Correct answer
+                options[selectedOption].style.backgroundColor = '#4CAF50'; // Green color
+
+                // Decrease the remaining questions counter
+                const remainingQuestionsElement = document.getElementById('remainingQuestions');
+                const remainingQuestions = parseInt(remainingQuestionsElement.textContent.split(':')[1].trim());
+                remainingQuestionsElement.textContent = `Questions to be answered: ${remainingQuestions - 1}`;
+
+            } else {
+                // Wrong answer
+                options[selectedOption].style.backgroundColor = '#f44336'; // Red color
+            }
+
+            // Pause for 1 second before continuing
+            setTimeout(() => {
+                // Reset option colors
+                options.forEach(option => {
+                    option.style.backgroundColor = '#fff'; // Default background color
+                });
+
+                // Continue with checking answer
+                if (selectedOption === currentQuestion.answer) {
+                    score++;
+                    scoreElement.textContent = `Score: ${score}`;
+                    // Move to the next question
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < checkedQuestions.length) {
+                        loadQuestion();
+                    } else {
+                        endGame();
+                    }
+                } else {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+
+        // Function to end the game
+        function endGame() {
+            alert(`Game Over! Your final score is ${score}`);
+        }
+
+        // Function to reset lifelines
+        function resetLifelines() {
+            for (let lifeline in lifelinesUsed) {
+                lifelinesUsed[lifeline] = false;
+                document.getElementById(lifeline).disabled = false;
+                document.getElementById(lifeline).classList.remove('used');
+            }
+        }
+
+        // Function for 50:50 lifeline
+        function fiftyFiftyLifeline() {
+            if (!lifelinesUsed.fiftyFifty) {
+                const currentQuestion = checkedQuestions[currentQuestionIndex];
+                const correctAnswerIndex = currentQuestion.answer;
+                const options = Array.from(optionsElement.children);
+                let wrongOptionsRemoved = 0;
+
+                for (let i = 0; i < options.length; i++) {
+                    if (i !== correctAnswerIndex && wrongOptionsRemoved < 2) {
+                        options[i].style.display = 'none';
+                        wrongOptionsRemoved++;
+                    }
+                }
+
+                lifelinesUsed.fiftyFifty = true;
+                document.getElementById('fiftyFifty').disabled = true;
+            }
+        }
+
+        // Function for Ask the Audience lifeline
+        function askAudienceLifeline() {
+            if (!lifelinesUsed.askAudience) {
+                const currentQuestion = checkedQuestions[currentQuestionIndex];
+                const correctAnswerIndex = currentQuestion.answer;
+                const options = Array.from(optionsElement.children);
+                const totalVotes = options.reduce((total, option) => total + (option.style.display !== 'none' ? 1 : 0), 0);
+                options.forEach((option, index) => {
+                    if (index === correctAnswerIndex) {
+                        option.textContent += ` (${Math.abs(Math.floor(Math.random() * 60) + 20)}%)`;
+                    } else {
+                        option.textContent += ` (${Math.abs(Math.floor(Math.random() * (totalVotes - 20)))}%)`;
+                    }
+                });
+                lifelinesUsed.askAudience = true;
+                document.getElementById('askAudience').disabled = true;
+                document.getElementById('askAudience').classList.add('used');
+            }
+        }
+
+        // Function for Phone a Friend lifeline
+        function phoneFriendLifeline() {
+            if (!lifelinesUsed.phoneFriend) {
+                const currentQuestion = checkedQuestions[currentQuestionIndex];
+                const correctAnswerIndex = currentQuestion.answer;
+                const friendAnswers = [
+                    "I'm pretty sure it's A.",
+                    "I think it's B, but I'm not 100% sure.",
+                    "Hmm, I'm not sure, but I'd guess C.",
+                    "I'm quite confident it's D."
+                ];
+                alert(`Your friend says: "${friendAnswers[correctAnswerIndex]}"`);
+                lifelinesUsed.phoneFriend = true;
+                document.getElementById('phoneFriend').disabled = true;
+            }
+        }
+
+        // Function to add custom question with category and difficulty
+        function addCustomQuestion() {
+            const customQuestionInput = document.getElementById('customQuestion');
+            const customOptionsInput = document.getElementById('customOptions');
+            const customAnswerInput = document.getElementById('customAnswer');
+            const customCategoryInput = document.getElementById('customCategory');
+            const customDifficultyInput = document.getElementById('customDifficulty');
+
+            const customQuestion = customQuestionInput.value.trim();
+            const customOptions = customOptionsInput.value.split(',').map(option => option.trim());
+            const customAnswer = parseInt(customAnswerInput.value);
+            const customCategory = customCategoryInput.value.trim(); // Get category value
+            const customDifficulty = parseInt(customDifficultyInput.value); // Get difficulty value
+
+            // Validate inputs
+            if (!customQuestion || customOptions.length < 2 || isNaN(customAnswer) || customAnswer < 0 || customAnswer >= customOptions.length || !customCategory || isNaN(customDifficulty) || customDifficulty < 1 || customDifficulty > 5) {
+                alert('Please provide a valid custom question, options, correct answer index, category, and difficulty level.');
+                return;
+            }
+
+            // Add custom question to the questions array
+            questions.push({
+                question: customQuestion,
+                options: customOptions,
+                answer: customAnswer,
+                category: customCategory,
+                difficulty: customDifficulty
+            });
+
+            // Clear inputs
+            customQuestionInput.value = '';
+            customOptionsInput.value = '';
+            customAnswerInput.value = '';
+            customCategoryInput.value = '';
+            customDifficultyInput.value = '';
+
+            // Inform the user
+            alert('Custom question added successfully!');
+
+            // Repopulate the question list
+            populateQuestionList();
+        }
+
+        // Function to restart the game
+        function restartGame() {
+            // Check if any question is checked
+            if (checkedQuestions.length === 0) {
+                // If no question is selected, display the message "No questions selected"
+                const noQuestionsSelectedMessage = document.createElement('h3');
+                noQuestionsSelectedMessage.textContent = 'No questions selected';
+                noQuestionsSelectedMessage.style.textAlign = 'center'; // Center the message
+                noQuestionsSelectedMessage.style.border = '2px solid #003366'; // Add border
+                document.getElementById('question').innerHTML = ''; // Clear question display
+                document.getElementById('question').appendChild(noQuestionsSelectedMessage);
+                document.getElementById('options').innerHTML = ''; // Clear options display
+                document.getElementById('score').textContent = 'Score: 0'; // Reset score display
+                return; // Abort the game restart
+            }
+
+            // Reset other game elements if questions are selected
+            currentQuestionIndex = 0;
+            score = 0;
+            lifelinesUsed = {
+                fiftyFifty: false,
+                askAudience: false,
+                phoneFriend: false
+            };
+            scoreElement.textContent = `Score: ${score}`; // Reset the score display
+
+            // Enable all lifeline buttons
+            document.getElementById('fiftyFifty').disabled = false;
+            document.getElementById('askAudience').disabled = false;
+            document.getElementById('phoneFriend').disabled = false;
+            resetLifelines(); // Reset lifelines style
+
+            // Reload the game with the updated list of checked questions
+            loadCheckedQuestions();
+
+            // Update the remaining questions counter
+            const remainingQuestionsElement = document.getElementById('remainingQuestions');
+            remainingQuestionsElement.textContent = `Questions to be answered: ${checkedQuestions.length}`;
+        }
+
+
+
+
+
+
+        // Function to toggle question list visibility
+        function toggleQuestionList() {
+            const questionList = document.getElementById('questionList');
+            questionList.style.display = questionList.style.display === 'none' ? 'block' : 'none';
+
+            // Hide delete buttons initially
+            const deleteButtons = document.querySelectorAll('.deleteButton');
+            deleteButtons.forEach(button => {
+                button.style.display = 'none';
+            });
+        }
+
+        // Function to populate question list
+        function populateQuestionList() {
+            const questionChecklist = document.getElementById('questionChecklist');
+            questionChecklist.innerHTML = ''; // Clear previous list items
+
+            // Add questions to the list
+            questions.forEach((question, index) => {
+                const listItem = document.createElement('li');
+
+                // Checkbox for question selection
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `question${index}`;
+                checkbox.checked = checkedQuestions.includes(question); // Check if question is in checkedQuestions
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        checkedQuestions.push(question);
+                    } else {
+                        const index = checkedQuestions.indexOf(question);
+                        if (index !== -1) {
+                            checkedQuestions.splice(index, 1);
+                        }
+                    }
+                });
+
+                // Label for question text
+                const label = document.createElement('label');
+                label.textContent = question.question;
+                label.htmlFor = `question${index}`;
+
+
+                // Delete button for removing the question
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('deleteButton'); // Add class for easier selection
+                deleteButton.addEventListener('click', () => {
+                    // Call deleteQuestion function to remove the question
+                    deleteQuestion(index);
+                });
+
+
+
+
+                // Append checkbox, label, and delete button to the list item
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+                listItem.appendChild(deleteButton);
+
+                // Append list item to the question checklist
+                questionChecklist.appendChild(listItem);
+            });
+
+
+        }
+
+
+        // Function to toggle visibility of delete buttons
+        function toggleDeleteButtons() {
+            const deleteButtons = document.querySelectorAll('.deleteButton');
+            deleteButtons.forEach(button => {
+                button.style.display = button.style.display === 'none' ? 'inline-block' : 'none';
+            });
+
+            const showButton = document.getElementById('showDeleteButtons');
+            showButton.textContent = showButton.textContent === 'Show Delete Buttons' ? 'Hide Delete Buttons' : 'Show Delete Buttons';
+        }
+
+        // Function to delete a question
+        function deleteQuestion(index) {
+
+            // Remove the question from the questions array
+            questions.splice(index, 1);
+
+            // Remove the question from checkedQuestions if it's checked
+            const questionToRemove = checkedQuestions.find(question => questions.indexOf(question) === index);
+            if (questionToRemove) {
+                const removeIndex = checkedQuestions.indexOf(questionToRemove);
+                checkedQuestions.splice(removeIndex, 1);
+            }
+
+            // Clean the checkedQuestions array
+            checkedQuestions = [];
+
+            // Repopulate the question list to reflect changes
+            populateQuestionList();
+
+            // Reload the game with updated list of checked questions
+            restartGame();
+            // Update the remaining questions counter
+            const remainingQuestionsElement = document.getElementById('remainingQuestions');
+            remainingQuestionsElement.textContent = `Questions to be answered: ${checkedQuestions.length}`;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Function to load only the checked questions
+        function loadCheckedQuestions() {
+            if (checkedQuestions.length > 0) {
+                currentQuestionIndex = 0;
+                // Update the remaining questions counter
+                const remainingQuestions = checkedQuestions.length;
+                document.getElementById('remainingQuestions').textContent = `Questions to be answered: ${remainingQuestions}`;
+                loadQuestion();
+            } else {
+                // If no question is selected, display a message
+                const questionDiv = document.getElementById('question');
+                questionDiv.innerHTML = '<h3 style="text-align: center; border: 1px solid black; padding: 10px;">No questions selected</h3>';
+                // Clear options
+                const optionsDiv = document.getElementById('options');
+                optionsDiv.innerHTML = '';
+            }
+        }
+
+
+        // Function to filter questions by name
+        function filterQuestions() {
+            const filterValue = document.getElementById('questionFilter').value.toLowerCase();
+            const questionChecklist = document.getElementById('questionChecklist');
+            const questionItems = questionChecklist.getElementsByTagName('li');
+
+            // Loop through all question items
+            for (let i = 0; i < questionItems.length; i++) {
+                const questionText = questionItems[i].textContent.toLowerCase();
+                // If the question name contains the filter value, display it, otherwise hide it
+                if (questionText.includes(filterValue)) {
+                    questionItems[i].style.display = 'block';
+                } else {
+                    questionItems[i].style.display = 'none';
+                }
+            }
+        }
+
+        // Call populateQuestionList initially
+        populateQuestionList();
+
+        // Start the game by loading the checked questions
+        loadCheckedQuestions();
+
+    </script>
+</body>
+
+</html>
