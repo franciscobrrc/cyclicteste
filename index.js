@@ -1,13 +1,14 @@
 require('dotenv').config();
 
-const express = require('express')
-const mongoose = require('mongoose')
+const express = require('express');
+const mongoose = require('mongoose');
 const Book = require("./models/books");
 
-const app = express()
-const PORT = process.env.PORT || 3000
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 mongoose.set('strictQuery', false);
+
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI);
@@ -18,21 +19,18 @@ const connectDB = async () => {
   }
 }
 
-//Routes go here
+// Routes go here
 app.get('/', (req,res) => {
     res.send({ title: 'Books' });
-})
+});
 
 app.get('/books', async (req,res)=> {
-
   const book = await Book.find();
-
   if (book) {
-    res.json(book)
+    res.json(book);
   } else {
     res.send("Something went wrong.");
   }
-  
 });
 
 app.get('/add-note', async (req,res) => {
@@ -47,15 +45,25 @@ app.get('/add-note', async (req,res) => {
         body: "Body text goes here...",
       }
     ]);
-    res.json({"Data":"Added"})
+    res.json({"Data":"Added"});
   } catch (error) {
     console.log("err", + error);
   }
-})
+});
 
-//Connect to the database before listening
+// New route to another page
+app.get('/hello', (req, res) => {
+    res.send('<button onclick="location.href=\'/hello-world\'">Go to Hello World</button>');
+});
+
+// Route to Hello World page
+app.get('/hello-world', (req, res) => {
+    res.send('Hello, World!');
+});
+
+// Connect to the database before listening
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log("listening for requests");
-    })
-})
+    });
+});
